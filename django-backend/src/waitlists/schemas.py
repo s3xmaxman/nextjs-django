@@ -1,4 +1,5 @@
 from ninja import Schema
+from typing import List, Any, Optional
 from datetime import datetime
 from pydantic import EmailStr
 
@@ -10,7 +11,21 @@ class WaitlistCreateSchema(Schema):
     制限事項: メールアドレスの形式チェックは行わない
     """
 
-    email: EmailStr  # メールアドレス
+    email: EmailStr
+
+
+class WaitlistEntryListSchema(Schema):
+    """
+    ウェイトリストエントリー一覧用のスキーマ
+    主な仕様: ユーザーのメールアドレスとタイムスタンプを返す
+    制限事項: タイムスタンプの形式チェックは行わない
+    """
+
+    id: int
+    email: EmailStr
+    updated: datetime
+    timestamp: datetime
+    description: Optional[str] = ""
 
 
 class WaitlistEntryDetailSchema(Schema):
@@ -20,5 +35,6 @@ class WaitlistEntryDetailSchema(Schema):
     制限事項: タイムスタンプの形式チェックは行わない
     """
 
-    email: EmailStr  # メールアドレス
-    timestamp: datetime  # タイムスタンプ
+    email: EmailStr
+    updated: datetime
+    timestamp: datetime
