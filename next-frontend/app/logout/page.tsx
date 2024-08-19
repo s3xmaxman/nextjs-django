@@ -1,7 +1,11 @@
 "use client";
+
+import { useAuth } from "@/components/authProvider";
+
 const LOGOUT_URL = "/api/logout/";
 
 export default function Page() {
+  const auth = useAuth();
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     const requestOptions = {
@@ -14,6 +18,7 @@ export default function Page() {
     const response = await fetch(LOGOUT_URL, requestOptions);
     if (response.ok) {
       console.log("logged out");
+      auth.logout();
     }
   }
   return (
