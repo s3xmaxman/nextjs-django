@@ -11,22 +11,24 @@ export async function POST(request: Request) {
 
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: jsonData,
   };
 
   const response = await fetch(DJANGO_API_LOGIN_URL, requestOptions);
+
   const responseData = await response.json();
 
   if (response.ok) {
-    console.log("Logged in successfully");
-    const { access, refresh } = responseData;
-
+    console.log("logged in");
+    const { username, access, refresh } = responseData;
     setToken(access);
     setRefreshToken(refresh);
 
     return NextResponse.json(
-      { loggedIn: true, ...responseData },
+      { loggedIn: true, username: username },
       { status: 200 }
     );
   }

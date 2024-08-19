@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import EmailStr
 
 
-class WaitlistCreateSchema(Schema):
+class WaitlistEntryCreateSchema(Schema):
     """
     ウェイトリスト作成用のスキーマ
     主な仕様: ユーザーのメールアドレスを受け取る

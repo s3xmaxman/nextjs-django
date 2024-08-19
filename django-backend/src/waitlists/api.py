@@ -3,7 +3,11 @@ from typing import List
 
 from django.shortcuts import get_object_or_404
 from ninja_jwt.authentication import JWTAuth
-from .schemas import WaitlistEntryListSchema, WaitlistEntryDetailSchema
+from .schemas import (
+    WaitlistEntryListSchema,
+    WaitlistEntryDetailSchema,
+    WaitlistEntryCreateSchema,
+)
 from .models import WaitlistEntry
 
 
@@ -15,6 +19,14 @@ def list_waitlist_entries(request):
     qs = WaitlistEntry.objects.all()
 
     return qs
+
+
+@router.post("")
+def create_waitlist_entry(request, data: WaitlistEntryCreateSchema):
+    print(data)
+    obj = WaitlistEntry.objects.create(**data.dict())
+
+    return obj
 
 
 @router.get("{entry_id}", response=WaitlistEntryDetailSchema, auth=JWTAuth())

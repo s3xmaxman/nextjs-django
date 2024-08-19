@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/components/authProvider";
 
 const LOGIN_URL = "/api/login/";
-
+// learncode
 export default function Page() {
   const auth = useAuth();
   async function handleSubmit(event: any) {
@@ -30,6 +30,7 @@ export default function Page() {
     try {
       data = await response.json();
     } catch (error) {}
+    // const data = await response.json()
     if (response.ok) {
       console.log("logged in");
       auth.login(data?.username);
