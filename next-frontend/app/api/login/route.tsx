@@ -1,4 +1,5 @@
 "use server";
+import { setRefreshToken, setToken } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 const DJANGO_API_LOGIN_URL = "http://127.0.0.1:8001/api/token/pair";
@@ -18,6 +19,12 @@ export async function POST(request: Request) {
   const responseData = await response.json();
 
   if (response.ok) {
+    console.log("Logged in successfully");
+    const { access, refresh } = responseData;
+
+    setToken(access);
+    setRefreshToken(refresh);
+
     return NextResponse.json(
       { loggedIn: true, ...responseData },
       { status: 200 }
