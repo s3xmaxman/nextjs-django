@@ -26,7 +26,7 @@ export default function Page() {
       body: jsonData,
     };
     const response = await fetch(LOGIN_URL, requestOptions);
-    let data = {};
+    let data: { username?: string } = {};
     try {
       data = await response.json();
     } catch (error) {}
@@ -38,8 +38,9 @@ export default function Page() {
       console.log(await response.json());
     }
   }
+
   return (
-    <div className="w-full lg:grid lg:min-h-[85vh]  lg:grid-cols-2 xl:min-h-[90vh]">
+    <div className="w-full h-[100vh] lg:grid lg:grid-cols-2">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
@@ -60,7 +61,7 @@ export default function Page() {
                   required
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-2 mt-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <Link href="/forgot-password" className="hidden">
@@ -69,9 +70,11 @@ export default function Page() {
                 </div>
                 <Input id="password" name="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
+              <div className="mt-4">
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
+              </div>
             </form>
           </div>
           <div className="mt-4 text-center text-sm">
@@ -82,13 +85,12 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
+      <div className="hidden lg:flex bg-muted items-center justify-center relative">
         <Image
-          src="/placeholder.svg"
-          alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          src="/login.png"
+          alt="Login background"
+          layout="fill"
+          objectFit="cover"
         />
       </div>
     </div>
