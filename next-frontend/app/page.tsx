@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/components/authProvider";
 import Image from "next/image";
 import { useState } from "react";
 import useSWR from "swr";
@@ -7,6 +8,7 @@ const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 
 export default function Home() {
+  const auth = useAuth();
   const { data, error, isLoading } = useSWR(
     "http://127.0.0.1:8001/api/hello",
     fetcher
@@ -17,6 +19,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>
+        <p>{JSON.stringify(auth ? auth : "no auth")}</p>
         <p>{JSON.stringify(data)}</p>
       </div>
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">

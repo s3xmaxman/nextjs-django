@@ -1,44 +1,54 @@
 "use client";
-import React from "react";
-
-// const LOGIN_URL = "http://127.0.0.1:8001/api/token/pair";
+import { useAuth } from "@/components/authProvider";
 const LOGIN_URL = "/api/login/";
 
-const page = () => {
-  const handleSubmit = async (event: React.FormEvent) => {
+export default function Page() {
+  const auth = useAuth();
+
+  async function handleSubmit(event: any) {
     event.preventDefault();
     console.log(event, event.target);
-    const formData = new FormData(event.target as HTMLFormElement);
-    const objectFormData = Object.fromEntries(formData);
-    const jsonData = JSON.stringify(objectFormData);
+    const formData = new FormData(event.target);
+    const objectFromForm = Object.fromEntries(formData);
+    const jsonData = JSON.stringify(objectFromForm);
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: jsonData,
     };
     const response = await fetch(LOGIN_URL, requestOptions);
-
+    // const data = await response.json()
     if (response.ok) {
-      const data = await response.json();
-      console.log(data);
+      console.log("logged in");
+      auth.login();
     }
-  };
+  }
 
   return (
     <div className="h-[95vh]">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" required name="username" placeholder="username" />
-        <input
-          type="password"
-          required
-          name="password"
-          placeholder="password"
-        />
-        <button type="submit">Login</button>
-      </form>
+      <div className="max-w-md mx-auto py-5">
+        <h1>Login Here</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            required
+            name="username"
+            placeholder="Your Username"
+            className="text-black"
+          />
+          <input
+            type="password"
+            required
+            name="password"
+            placeholder="Your password"
+            className="text-black"
+          />
+
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
-};
-
-export default page;
+}
