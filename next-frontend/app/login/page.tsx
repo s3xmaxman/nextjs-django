@@ -30,7 +30,6 @@ export default function Page() {
     try {
       data = await response.json();
     } catch (error) {}
-    // const data = await response.json()
     if (response.ok) {
       console.log("logged in");
       auth.login(data?.username);
@@ -40,7 +39,7 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full h-[100vh] lg:grid lg:grid-cols-2">
+    <div className="w-full lg:grid lg:min-h-[85vh]  lg:grid-cols-2 xl:min-h-[90vh]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
@@ -61,7 +60,7 @@ export default function Page() {
                   required
                 />
               </div>
-              <div className="grid gap-2 mt-2">
+              <div className="grid gap-2 mt-4">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <Link href="/forgot-password" className="hidden">
@@ -85,12 +84,13 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:flex bg-muted items-center justify-center relative">
+      <div className="hidden bg-muted lg:block">
         <Image
           src="/login.png"
-          alt="Login background"
-          layout="fill"
-          objectFit="cover"
+          alt="Image"
+          width="1920"
+          height="1080"
+          className="h-full w-full object-cover "
         />
       </div>
     </div>
