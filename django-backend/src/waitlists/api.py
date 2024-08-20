@@ -19,7 +19,7 @@ router = Router()
 @router.get(
     "",
     response=List[WaitlistEntryListSchema],
-    auth=helpers.api_auth_user_required,
+    auth=helpers.api_auth_user_or_annon,
 )
 def list_waitlist_entries(request):
     qs = WaitlistEntry.objects.filter(user=request.user)
