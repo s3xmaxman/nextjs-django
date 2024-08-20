@@ -16,9 +16,13 @@ export default function WaitlistForm() {
     setMessage("");
     setErrors({});
     setError("");
+
     const formData = new FormData(event.target);
+
     const objectFromForm = Object.fromEntries(formData);
+
     const jsonData = JSON.stringify(objectFromForm);
+
     const requestOptions = {
       method: "POST",
       headers: {
@@ -26,8 +30,9 @@ export default function WaitlistForm() {
       },
       body: jsonData,
     };
+
     const response = await fetch(WAITLIST_API_URL, requestOptions);
-    // const data = await response.json()
+
     if (response.status === 201 || response.status === 200) {
       setMessage("Thank you for joining");
     } else {
@@ -38,6 +43,7 @@ export default function WaitlistForm() {
       }
     }
   }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {message && (

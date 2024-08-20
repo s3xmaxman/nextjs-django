@@ -1,5 +1,6 @@
 from ninja import Router
 from typing import List
+import json
 import helpers
 from ninja_jwt.authentication import JWTAuth
 
@@ -31,20 +32,36 @@ def list_waitlist_entries(request):
 @router.post(
     "",
     response={
-        200: WaitlistEntryDetailSchema,
+        201: WaitlistEntryDetailSchema,
         400: ErrorWaitlistEntryCreateSchema,
     },
     auth=helpers.api_auth_user_or_annon,
 )
 def create_waitlist_entry(request, data: WaitlistEntryCreateSchema):
-    form = WaitlistEntryCreateForm(data.dict())
-    if form.is_valid():
-        obj = form.save(commit=False)
+    """
+    待機リストエントリを作成する
 
-        if request.user.is_authenticated:
-            obj.user = request.user
-        obj.save()
-    return obj
+    Args:
+        request (HttpRequest): リクエストオブジェクト
+        data (WaitlistEntryCreateSchema): 待機リストエントリのデータ
+
+    Returns:
+        tuple: (HTTPステータスコード, 待機リストエントリオブジェクト または エラー情報)
+    """
+    form = WaitlistEntryCreateForm(data.dict())
+
+    if not form.is_valid():
+        # フォームのバリデーションが失敗した場合、エラー情報を返す
+        form_errors = json.loads(form.errors.as_json())
+        return 400, form_errors
+
+    obj = form.save(commit=False)
+
+    if request.user.is_authenticated:
+        # ユーザーが認証されている場合は、ユーザーを待機リストエントリに紐付ける
+        obj.user = request.user
+    obj.save()
+    return 201, obj
 
 
 @router.get(
