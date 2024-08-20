@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>{data && data.apiEndpoint}</div>
+      <div>{data && data.apiEndpoint ? data.apiEndpoint : "Loading..."}</div>
       <div>
         <WaitlistForm />
       </div>
