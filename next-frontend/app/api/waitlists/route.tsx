@@ -11,10 +11,12 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const requestData = await request.json();
+
   const { data, status } = await ApiProxy.post(
     DJANGO_API_WAITLISTS_URL,
     requestData,
     true
   );
+
   return NextResponse.json(data, { status: status });
 }

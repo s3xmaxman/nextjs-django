@@ -14,6 +14,16 @@ class WaitlistEntryCreateSchema(Schema):
     email: EmailStr
 
 
+class ErrorWaitlistEntryCreateSchema(Schema):
+    """
+    ウェイトリストエントリー作成エラー用のスキーマ
+    主な仕様: エラー発生時のメールアドレスに関するエラー情報を返す
+    制限事項: エラーの詳細情報はリスト形式で返すが、内容の検証は行わない
+    """
+
+    email: List[Any]
+
+
 class WaitlistEntryListSchema(Schema):
     """
     ウェイトリストエントリー一覧用のスキーマ

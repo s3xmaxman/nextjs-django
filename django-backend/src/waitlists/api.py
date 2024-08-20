@@ -4,11 +4,12 @@ import helpers
 from ninja_jwt.authentication import JWTAuth
 
 from django.shortcuts import get_object_or_404
-
+from .forms import WaitlistEntryCreateForm
 from .schemas import (
     WaitlistEntryListSchema,
     WaitlistEntryDetailSchema,
     WaitlistEntryCreateSchema,
+    ErrorWaitlistEntryCreateSchema,
 )
 from .models import WaitlistEntry
 
@@ -27,11 +28,22 @@ def list_waitlist_entries(request):
     return qs
 
 
-@router.post("", auth=helpers.api_auth_user_or_annon)
+@router.post(
+    "",
+    response={
+        200: WaitlistEntryDetailSchema,
+        400: ErrorWaitlistEntryCreateSchema,
+    },
+    auth=helpers.api_auth_user_or_annon,
+)
 def create_waitlist_entry(request, data: WaitlistEntryCreateSchema):
-    print(data)
-    obj = WaitlistEntry.objects.create(**data.dict())
+    form = WaitlistEntryCreateForm(data.dict())
+    if form.is_valid():
+        obj = form.save(commit=False)
 
+        if request.user.is_authenticated:
+            obj.user = request.user
+        obj.save()
     return obj
 
 
