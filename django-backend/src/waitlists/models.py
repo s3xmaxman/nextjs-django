@@ -14,5 +14,6 @@ class WaitlistEntry(models.Model):
         on_delete=models.SET_NULL,
     )
     email = models.EmailField()
+    description = models.TextField(blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
