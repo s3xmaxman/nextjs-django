@@ -26,9 +26,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const storedAuthStatusInt = parseInt(storedAuthStatus);
       setIsAuthenticated(storedAuthStatusInt === 1);
     }
+
+    const storedUn = localStorage.getItem(LOCAL_USERNAME_KEY);
+
+    if (storedUn) {
+      setUsername(storedUn);
+    }
   }, []);
 
-  const login = (username: string) => {
+  const login = (username?: string) => {
     setIsAuthenticated(true);
     localStorage.setItem(LOCAL_STORAGE_KEY, "1");
 
@@ -72,7 +78,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, loginRequiredRedirect }}
+      value={{
+        isAuthenticated,
+        login,
+        logout,
+        loginRequiredRedirect,
+        username,
+      }}
     >
       {children}
     </AuthContext.Provider>

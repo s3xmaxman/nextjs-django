@@ -24,6 +24,7 @@ export async function POST(request: Request) {
   if (response.ok) {
     console.log("logged in");
     const { username, access, refresh } = responseData;
+
     setToken(access);
     setRefreshToken(refresh);
 

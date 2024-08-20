@@ -18,7 +18,9 @@ export default function Home() {
       <div>
         <WaitlistForm />
       </div>
-      <div>{auth.isAuthenticated ? "Hello user" : "Hello guest"}</div>
+      <div>
+        {auth.isAuthenticated ? `Hello ${auth.username}` : "Hello guest"}
+      </div>
       <div>
         <ThemeToggleButton />
       </div>
