@@ -11,6 +11,7 @@ from .schemas import (
     WaitlistEntryDetailSchema,
     WaitlistEntryCreateSchema,
     ErrorWaitlistEntryCreateSchema,
+    WaitlistEntryUpdateSchema,
 )
 from .models import WaitlistEntry
 
@@ -65,11 +66,100 @@ def create_waitlist_entry(request, data: WaitlistEntryCreateSchema):
 
 
 @router.get(
-    "{entry_id}",
+    "{entry_id}/",
     response=WaitlistEntryDetailSchema,
     auth=helpers.api_auth_user_required,
 )
-def list_waitlist_entries(request, entry_id: int):
-    obj = get_object_or_404(WaitlistEntry, id=entry_id, user=request.user)
+def get_wailist_entry(request, entry_id: int):
+    """
+    待機リストエントリを取得する
 
+    Args:
+        request (HttpRequest): リクエストオブジェクト
+        entry_id (int): 取得する待機リストエントリのID
+
+    Returns:
+        WaitlistEntryDetailSchema: 待機リストエントリオブジェクト
+
+    Raises:
+        Http404: 指定されたIDの待機リストエントリが存在しない場合
+    """
+    obj = get_object_or_404(
+        WaitlistEntry,
+        id=entry_id,
+        user=request.user,
+    )
+    return obj
+
+
+@router.put(
+    "{entry_id}/",
+    response=WaitlistEntryDetailSchema,
+    auth=helpers.api_auth_user_required,
+)
+def update_waitlist_entry(
+    request,
+    entry_id: int,
+    payload: WaitlistEntryUpdateSchema,
+):
+    """
+    待機リストエントリを更新する
+
+    Args:
+        request (HttpRequest): リクエストオブジェクト
+        entry_id (int): 更新する待機リストエントリのID
+        payload (WaitlistEntryUpdateSchema): 更新するデータ
+
+    Returns:
+        WaitlistEntryDetailSchema: 更新された待機リストエントリオブジェクト
+
+    Raises:
+        Http404: 指定されたIDの待機リストエントリが存在しない場合
+    """
+    # IDとユーザーに一致する待機リストエントリを取得する。存在しない場合は404を返す
+    obj = get_object_or_404(
+        WaitlistEntry,
+        id=entry_id,
+        user=request.user,
+    )
+
+    # リクエストのペイロードを辞書に変換
+    payload_dict = payload.dict()
+
+    # 各フィールドを更新
+    for key, value in payload_dict.items():
+        setattr(obj, key, value)
+
+    # 更新したオブジェクトを保存
+    obj.save()
+
+    # 更新されたオブジェクトを返す
+    return obj
+
+
+@router.delete(
+    "{entry_id}/delete/",
+    response=WaitlistEntryDetailSchema,
+    auth=helpers.api_auth_user_required,
+)
+def delete_waitlist_entry(request, entry_id: int):
+    """
+    待機リストエントリを削除する
+
+    Args:
+        request (HttpRequest): リクエストオブジェクト
+        entry_id (int): 削除する待機リストエントリのID
+
+    Returns:
+        WaitlistEntryDetailSchema: 削除された待機リストエントリオブジェクト
+
+    Raises:
+        Http404: 指定されたIDの待機リストエントリが存在しない場合
+    """
+    obj = get_object_or_404(
+        WaitlistEntry,
+        id=entry_id,
+        user=request.user,
+    )
+    obj.delete()
     return obj
