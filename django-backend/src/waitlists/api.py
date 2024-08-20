@@ -22,7 +22,7 @@ router = Router()
     auth=helpers.api_auth_user_required,
 )
 def list_waitlist_entries(request):
-    qs = WaitlistEntry.objects.all()
+    qs = WaitlistEntry.objects.filter(user=request.user)
 
     return qs
 
@@ -41,6 +41,6 @@ def create_waitlist_entry(request, data: WaitlistEntryCreateSchema):
     auth=helpers.api_auth_user_required,
 )
 def list_waitlist_entries(request, entry_id: int):
-    obj = get_object_or_404(WaitlistEntry, id=entry_id)
+    obj = get_object_or_404(WaitlistEntry, id=entry_id, user=request.user)
 
     return obj
