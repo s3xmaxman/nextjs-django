@@ -18,6 +18,7 @@ export default function Page() {
     const formData = new FormData(event.target);
     const objectFromForm = Object.fromEntries(formData);
     const jsonData = JSON.stringify(objectFromForm);
+
     const requestOptions = {
       method: "POST",
       headers: {
@@ -25,12 +26,14 @@ export default function Page() {
       },
       body: jsonData,
     };
+
     const response = await fetch(LOGIN_URL, requestOptions);
+
     let data: { username?: string } = {};
+
     try {
       data = await response.json();
     } catch (error) {}
-    // const data = await response.json()
     if (response.ok) {
       console.log("logged in");
       auth.login(data?.username);
